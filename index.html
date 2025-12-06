@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Итоги года 2023</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Основная карточка */
+        .card-container {
+            width: 100%;
+            max-width: 500px;
+            height: 500px;
+            perspective: 1000px;
+            margin-bottom: 40px;
+            cursor: pointer;
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 2px solid #00dbde;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #2d0b5f, #1a1a2e);
+            border: 2px solid #ff00ff;
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+
+        .achievement-title {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #00dbde, #ff00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .achievement-image {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+        }
+
+        .achievement-description {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: #f0f0f0;
+        }
+
+        .back-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        /* Прогресс бар */
+        .progress-container {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 40px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00dbde, #ff00ff);
+            border-radius: 10px;
+            transition: width 0.8s ease;
+        }
+
+        /* Футер с иконками достижений */
+        .footer-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .achievement-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #111;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #333;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .achievement-icon.active {
+            border-color: #00dbde;
+            box-shadow: 0 0 15px rgba(0, 219, 222, 0.5);
+            transform: scale(1.05);
+        }
+
+        .achievement-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .achievement-icon.active img {
+            display: block;
+        }
+
+        .icon-placeholder {
+            font-size: 1.5rem;
+            color: #444;
+        }
+
+        /* Навигация */
+        .nav-hint {
+            margin-top: 25px;
+            font-size: 1rem;
+            color: #aaa;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            .card-container {
+                height: 400px;
+            }
+            
+            .achievement-title {
+                font-size: 1.8rem;
+            }
+            
+            .achievement-image {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .achievement-description, .back-text {
+                font-size: 1.1rem;
+            }
+            
+            .achievement-icon {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Прогресс-бар -->
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="progress-text">Расчёт ущерба...</span>
+                <span class="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- Основная карточка -->
+        <div class="card-container" id="cardContainer">
+            <div class="card" id="mainCard">
+                <div class="card-face card-front">
+                    <h1 class="achievement-title" id="cardTitle">Подведём итоги года</h1>
+                    <img src="https://via.placeholder.com/250x250/302b63/ffffff?text=Твоя+картинка" alt="Достижение" class="achievement-image" id="cardImage">
+                    <p class="achievement-description" id="cardDescription">Нажми на карточку, чтобы начать путешествие по итогам года</p>
+                </div>
+                <div class="card-face card-back">
+                    <p class="back-text" id="cardBackText">Готовься к удивительным открытиям! В этом году было много крутых моментов, которые мы собрали в виде достижений. Кликай дальше!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Подсказка -->
+        <div class="nav-hint" id="navHint">
+            <i class="fas fa-hand-point-up"></i> Кликни на карточку чтобы перевернуть, затем кликни снова для следующего
+        </div>
+    </div>
+
+    <!-- Футер с иконками достижений -->
+    <div class="footer-icons" id="footerIcons">
+        <!-- Иконки будут заполняться по мере прохождения -->
+        <div class="achievement-icon" data-id="0"><div class="icon-placeholder">?</div><img src="" alt=""></div>
+        <div class="achievement-icon" data-id="1"><div class="icon-placeholder">?</div><img src="" alt=""></div>
+        <div class="achievement-icon" data-id="2"><div class="icon-placeholder">?</div><img src="" alt=""></div>
+        <div class="achievement-icon" data-id="3"><div class="icon-placeholder">?</div><img src="" alt=""></div>
+        <div class="achievement-icon" data-id="4"><div class="icon-placeholder">?</div><img src="" alt=""></div>
+    </div>
+
+    <script>
+        // Данные карточек (ВЫ ЗАМЕНИТЕ ЭТО СВОИМИ ДАННЫМИ)
+        const cardData = [
+            // Карточка 0: Титульная
+            {
+                title: "Подведём итоги года",
+                image: "https://via.placeholder.com/250x250/302b63/ffffff?text=Твоя+картинка",
+                description: "Нажми на карточку, чтобы начать путешествие по итогам года",
+                backText: "Готовься к удивительным открытиям! В этом году было много крутых моментов, которые мы собрали в виде достижений. Кликай дальше!",
+                icon: ""
+            },
+            // Карточка 1: Первое достижение
+            {
+                title: "Покорительница вершин",
+                image: "https://via.placeholder.com/250x250/00dbde/000000?text=Горы",
+                description: "За невероятные восхождения и преодоление высот",
+                backText: "В этом году ты покорила не одну вершину - и в прямом, и в переносном смысле! Новые навыки, сложные задачи и личные рекорды - всё это твои горные пики.",
+                icon: "https://via.placeholder.com/60x60/00dbde/ffffff?text=🏔️"
+            },
+            // Карточка 2: Второе достижение
+            {
+                title: "Блудный сын вернулся",
+                image: "https://via.placeholder.com/250x250/ff00ff/000000?text=Возвращение",
+                description: "За долгожданное возвращение в родные пенаты",
+                backText: "После долгих странствий ты наконец-то вернулась в лоно семьи/друзей/коллектива. И все очень этому рады!",
+                icon: "https://via.placeholder.com/60x60/ff00ff/ffffff?text=🏠"
+            },
+            // Карточка 3: Третье достижение
+            {
+                title: "За отличный музыкальный вкус",
+                image: "https://via.placeholder.com/250x250/9d4edd/000000?text=Музыка",
+                description: "За самые крутые плейлисты и открытия года",
+                backText: "Твои музыкальные рекомендации спасали настроение, вдохновляли на подвиги и задавали ритм всему году. Ты - наш главный диджей!",
+                icon: "https://via.placeholder.com/60x60/9d4edd/ffffff?text=🎵"
+            },
+            // Карточка 4: Четвертое достижение
+            {
+                title: "Макима она и в Бутово Макима",
+                image: "https://via.placeholder.com/250x250/f8961e/000000?text=Макима",
+                description: "За стойкость и характер в любых обстоятельствах",
+                backText: "Где бы ты ни была - в центре мегаполиса или на окраине, ты остаешься собой: сильной, целеустремленной и неповторимой.",
+                icon: "https://via.placeholder.com/60x60/f8961e/ffffff?text=🌟"
+            },
+            // Карточка 5: Пятое достижение
+            {
+                title: "За любознательность",
+                image: "https://via.placeholder.com/250x250/43aa8b/000000?text=Знания",
+                description: "За жажду знаний и невероятную эрудицию",
+                backText: "Ты постоянно узнаешь что-то новое, задаешь вопросы, ищешь ответы и расширяешь горизонты. Эта любознательность - твоя суперсила!",
+                icon: "https://via.placeholder.com/60x60/43aa8b/ffffff?text=🔍"
+            },
+            // Карточка 6: Расчет приговора
+            {
+                title: "Выполняется расчёт приговора",
+                image: "https://via.placeholder.com/250x250/577590/000000?text=Расчёт",
+                description: "Итоговая обработка данных года...",
+                backText: "Система анализирует все достижения, суммирует баллы и готовит финальный вердикт. Почти готово!",
+                icon: ""
+            },
+            // Карточка 7: Финальная картинка
+            {
+                title: "А вот и приговор!",
+                image: "https://via.placeholder.com/250x250/f94144/ffffff?text=Смешная+картинка",
+                description: "Спасибо, что была частью этого года!",
+                backText: "Твой вердикт: АБСОЛЮТНО ПОТРЯСАЮЩИЙ ЧЕЛОВЕК! Спасибо за все эмоции, поддержку и совместные приключения. Ждем тебя в следующем году!",
+                icon: ""
+            }
+        ];
+
+        // Статусы для прогресс-бара
+        const progressTexts = [
+            "Расчёт ущерба...",
+            "Анализ восхождений...",
+            "Сканирование возвращений...",
+            "Оценка музыкального вкуса...",
+            "Проверка стойкости...",
+            "Измерение любознательности...",
+            "Вынесение приговора...",
+            "Приговор готов!"
+        ];
+
+        // Переменные состояния
+        let currentCardIndex = 0;
+        let isFlipped = false;
+        let unlockedAchievements = 0;
+
+        // Элементы DOM
+        const mainCard = document.getElementById('mainCard');
+        const cardContainer = document.getElementById('cardContainer');
+        const cardTitle = document.getElementById('cardTitle');
+        const cardImage = document.getElementById('cardImage');
+        const cardDescription = document.getElementById('cardDescription');
+        const cardBackText = document.getElementById('cardBackText');
+        const progressText = document.querySelector('.progress-text');
+        const progressPercent = document.querySelector('.progress-percent');
+        const progressFill = document.querySelector('.progress-fill');
+        const navHint = document.getElementById('navHint');
+        const footerIcons = document.getElementById('footerIcons').querySelectorAll('.achievement-icon');
+
+        // Функция обновления карточки
+        function updateCard() {
+            const card = cardData[currentCardIndex];
+            
+            cardTitle.textContent = card.title;
+            cardImage.src = card.image;
+            cardDescription.textContent = card.description;
+            cardBackText.textContent = card.backText;
+            
+            // Сброс положения карточки (не перевернута)
+            isFlipped = false;
+            mainCard.classList.remove('flipped');
+            
+            // Обновление прогресс-бара
+            const progress = Math.min(100, Math.round((currentCardIndex / (cardData.length - 1)) * 100));
+            progressFill.style.width = `${progress}%`;
+            progressPercent.textContent = `${progress}%`;
+            
+            // Обновление текста прогресса
+            progressText.textContent = progressTexts[Math.min(currentCardIndex, progressTexts.length - 1)];
+            
+            // Обновление подсказки
+            if (currentCardIndex === 0) {
+                navHint.innerHTML = '<i class="fas fa-hand-point-up"></i> Кликни на карточку чтобы начать';
+            } else if (currentCardIndex === cardData.length - 1) {
+                navHint.innerHTML = '<i class="fas fa-heart"></i> Это было круто! Поделись с друзьями!';
+            } else {
+                navHint.innerHTML = '<i class="fas fa-hand-point-up"></i> Кликни на карточку чтобы перевернуть, затем кликни снова для следующего';
+            }
+            
+            // Разблокировка иконок в футере
+            if (currentCardIndex > 0 && currentCardIndex <= 5 && card.icon) {
+                const iconIndex = currentCardIndex - 1;
+                if (iconIndex < footerIcons.length) {
+                    footerIcons[iconIndex].classList.add('active');
+                    const img = footerIcons[iconIndex].querySelector('img');
+                    img.src = card.icon;
+                    img.alt = card.title;
+                }
+            }
+        }
+
+        // Функция перехода к следующей карточке
+        function nextCard() {
+            if (currentCardIndex < cardData.length - 1) {
+                currentCardIndex++;
+                updateCard();
+            }
+        }
+
+        // Обработчик клика по карточке
+        cardContainer.addEventListener('click', function() {
+            if (!isFlipped) {
+                // Первый клик - переворачиваем карточку
+                mainCard.classList.add('flipped');
+                isFlipped = true;
+                
+                // Для последней карточки не переходим дальше
+                if (currentCardIndex === cardData.length - 1) {
+                    navHint.innerHTML = '<i class="fas fa-redo"></i> Кликни чтобы начать заново';
+                }
+            } else {
+                // Второй клик - переходим к следующей карточке
+                if (currentCardIndex < cardData.length - 1) {
+                    nextCard();
+                } else {
+                    // Если это последняя карточка - начинаем заново
+                    currentCardIndex = 0;
+                    updateCard();
+                    
+                    // Сбрасываем иконки в футере
+                    footerIcons.forEach(icon => {
+                        icon.classList.remove('active');
+                    });
+                }
+            }
+        });
+
+        // Инициализация
+        updateCard();
+
+        // Добавляем поддержку клавиатуры
+        document.addEventListener('keydown', function(event) {
+            if (event.code === 'Space' || event.code === 'ArrowRight') {
+                cardContainer.click();
+            }
+        });
+
+        // Небольшая анимация при загрузке
+        setTimeout(() => {
+            document.body.style.opacity = 1;
+        }, 100);
+    </script>
+</body>
+</html>
