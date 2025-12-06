@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Итоги года 2023</title>
+    <title>Итоги года 2025</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -230,6 +230,162 @@
                 height: 50px;
             }
         }
+        /* Исправленная основная карточка */
+.card-container {
+    width: 90vw;
+    max-width: 500px;
+    height: 90vw;
+    max-height: 500px;
+    perspective: 1000px;
+    margin: 0 auto 40px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.card-front {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 2px solid #00dbde;
+}
+
+.card-back {
+    background: linear-gradient(135deg, #2d0b5f, #1a1a2e);
+    border: 2px solid #ff00ff;
+    transform: rotateY(180deg);
+    overflow-y: auto;
+    padding: 30px;
+}
+
+/* Заголовок */
+.achievement-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #00dbde, #ff00ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 800;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    line-height: 1.3;
+    max-width: 100%;
+    word-break: break-word;
+}
+
+/* Изображение */
+.achievement-image {
+    width: 60%;
+    max-width: 200px;
+    height: 60%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    margin: 10px 0;
+}
+
+/* Описание */
+.achievement-description {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: #f0f0f0;
+    margin-top: 10px;
+    padding: 0 10px;
+    max-height: 20%;
+    overflow-y: auto;
+}
+
+/* Текст на обороте */
+.back-text {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #e0e0e0;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .card-container {
+        width: 85vw;
+        height: 85vw;
+        max-width: 400px;
+        max-height: 400px;
+    }
+    
+    .achievement-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+    
+    .achievement-image {
+        width: 65%;
+        max-width: 180px;
+        height: 65%;
+        max-height: 180px;
+    }
+    
+    .achievement-description {
+        font-size: 1rem;
+        max-height: 25%;
+    }
+    
+    .back-text {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .card-container {
+        width: 80vw;
+        height: 80vw;
+        max-width: 320px;
+        max-height: 320px;
+    }
+    
+    .achievement-title {
+        font-size: 1.3rem;
+    }
+    
+    .achievement-image {
+        width: 70%;
+        max-width: 150px;
+        height: 70%;
+        max-height: 150px;
+    }
+    
+    .achievement-description {
+        font-size: 0.9rem;
+    }
+    
+    .back-text {
+        font-size: 1rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -249,12 +405,12 @@
         <div class="card-container" id="cardContainer">
             <div class="card" id="mainCard">
                 <div class="card-face card-front">
-                    <h1 class="achievement-title" id="cardTitle">Подведём итоги года</h1>
-                    <img src="https://via.placeholder.com/250x250/302b63/ffffff?text=Твоя+картинка" alt="Достижение" class="achievement-image" id="cardImage">
-                    <p class="achievement-description" id="cardDescription">Нажми на карточку, чтобы начать путешествие по итогам года</p>
+                    <h1 class="achievement-title" id="cardTitle"></h1>
+                    <img src="" alt="Достижение" class="achievement-image" id="cardImage">
+                    <p class="achievement-description" id="cardDescription"></p>
                 </div>
                 <div class="card-face card-back">
-                    <p class="back-text" id="cardBackText">Готовься к удивительным открытиям! В этом году было много крутых моментов, которые мы собрали в виде достижений. Кликай дальше!</p>
+                    <p class="back-text" id="cardBackText"></p>
                 </div>
             </div>
         </div>
@@ -268,11 +424,11 @@
     <!-- Футер с иконками достижений -->
     <div class="footer-icons" id="footerIcons">
         <!-- Иконки будут заполняться по мере прохождения -->
-        <div class="achievement-icon" data-id="0"><div class="icon-placeholder">?</div><img src="" alt=""></div>
-        <div class="achievement-icon" data-id="1"><div class="icon-placeholder">?</div><img src="" alt=""></div>
-        <div class="achievement-icon" data-id="2"><div class="icon-placeholder">?</div><img src="" alt=""></div>
-        <div class="achievement-icon" data-id="3"><div class="icon-placeholder">?</div><img src="" alt=""></div>
-        <div class="achievement-icon" data-id="4"><div class="icon-placeholder">?</div><img src="" alt=""></div>
+        <div class="achievement-icon" data-id="0"><div class="icon-placeholder">?</div><img src="1.jpg" alt=""></div>
+        <div class="achievement-icon" data-id="1"><div class="icon-placeholder">?</div><img src="2.jpg" alt=""></div>
+        <div class="achievement-icon" data-id="2"><div class="icon-placeholder">?</div><img src="3.jpg" alt=""></div>
+        <div class="achievement-icon" data-id="3"><div class="icon-placeholder">?</div><img src="4.jpg" alt=""></div>
+        <div class="achievement-icon" data-id="4"><div class="icon-placeholder">?</div><img src="5.jpg" alt=""></div>
     </div>
 
     <script>
@@ -281,7 +437,7 @@
             // Карточка 0: Титульная
             {
                 title: "Подведём итоги года",
-                image: "https://via.placeholder.com/250x250/302b63/ffffff?text=Твоя+картинка",
+                image: "0.jpg",
                 description: "Нажми на карточку, чтобы начать путешествие по итогам года",
                 backText: "Готовься к удивительным открытиям! В этом году было много крутых моментов, которые мы собрали в виде достижений. Кликай дальше!",
                 icon: ""
@@ -289,47 +445,47 @@
             // Карточка 1: Первое достижение
             {
                 title: "Покорительница вершин",
-                image: "https://via.placeholder.com/250x250/00dbde/000000?text=Горы",
+                image: "1.jpg",
                 description: "За невероятные восхождения и преодоление высот",
-                backText: "В этом году ты покорила не одну вершину - и в прямом, и в переносном смысле! Новые навыки, сложные задачи и личные рекорды - всё это твои горные пики.",
+                backText: "110,9 часов в наших кооперативных играх. Тебе реально было нечего делать в этом годжу! Могли бы сыграть 365*3-110,9 = 834,1 часа не были сыграны...",
                 icon: "https://via.placeholder.com/60x60/00dbde/ffffff?text=🏔️"
             },
             // Карточка 2: Второе достижение
             {
                 title: "Блудный сын вернулся",
-                image: "https://via.placeholder.com/250x250/ff00ff/000000?text=Возвращение",
+                image: "2.jpg",
                 description: "За долгожданное возвращение в родные пенаты",
-                backText: "После долгих странствий ты наконец-то вернулась в лоно семьи/друзей/коллектива. И все очень этому рады!",
+                backText: "После, оценочно, 139 дней в завязке (по бухгалтерскому калькулятору) могла бы выпить, но не выпила 20 литров пива. Зато попробовала вишнёвый СИДР.",
                 icon: "https://via.placeholder.com/60x60/ff00ff/ffffff?text=🏠"
             },
             // Карточка 3: Третье достижение
             {
                 title: "За отличный музыкальный вкус",
-                image: "https://via.placeholder.com/250x250/9d4edd/000000?text=Музыка",
+                image: "3.jpg",
                 description: "За самые крутые плейлисты и открытия года",
-                backText: "Твои музыкальные рекомендации спасали настроение, вдохновляли на подвиги и задавали ритм всему году. Ты - наш главный диджей!",
+                backText: "Примерно 26 открытий из Яндекс Музыки ты нам кинула. Добавлены были в среднем 4.",
                 icon: "https://via.placeholder.com/60x60/9d4edd/ffffff?text=🎵"
             },
             // Карточка 4: Четвертое достижение
             {
                 title: "Макима она и в Бутово Макима",
-                image: "https://via.placeholder.com/250x250/f8961e/000000?text=Макима",
+                image: "4.jpg",
                 description: "За стойкость и характер в любых обстоятельствах",
-                backText: "Где бы ты ни была - в центре мегаполиса или на окраине, ты остаешься собой: сильной, целеустремленной и неповторимой.",
+                backText: "В среднем на 100 отправленных рилсов было получено 8,5 сердечек. Спасибо за поддержку!",
                 icon: "https://via.placeholder.com/60x60/f8961e/ffffff?text=🌟"
             },
             // Карточка 5: Пятое достижение
             {
-                title: "За любознательность",
-                image: "https://via.placeholder.com/250x250/43aa8b/000000?text=Знания",
+                title: "За телекинетические способности",
+                image: "5.jpg",
                 description: "За жажду знаний и невероятную эрудицию",
-                backText: "Ты постоянно узнаешь что-то новое, задаешь вопросы, ищешь ответы и расширяешь горизонты. Эта любознательность - твоя суперсила!",
+                backText: "Было скручено порядка 20 яичек и расплавлен 1 мозжечок.",
                 icon: "https://via.placeholder.com/60x60/43aa8b/ffffff?text=🔍"
             },
             // Карточка 6: Расчет приговора
             {
                 title: "Выполняется расчёт приговора",
-                image: "https://via.placeholder.com/250x250/577590/000000?text=Расчёт",
+                image: "6.jpg",
                 description: "Итоговая обработка данных года...",
                 backText: "Система анализирует все достижения, суммирует баллы и готовит финальный вердикт. Почти готово!",
                 icon: ""
@@ -337,9 +493,9 @@
             // Карточка 7: Финальная картинка
             {
                 title: "А вот и приговор!",
-                image: "https://via.placeholder.com/250x250/f94144/ffffff?text=Смешная+картинка",
-                description: "Спасибо, что была частью этого года!",
-                backText: "Твой вердикт: АБСОЛЮТНО ПОТРЯСАЮЩИЙ ЧЕЛОВЕК! Спасибо за все эмоции, поддержку и совместные приключения. Ждем тебя в следующем году!",
+                image: "7.jpg",
+                description: "Да, да, это тебе",
+                backText: "Твой вердикт: Нарушены 7 статей административного кодекса, 4 уголовного, 11 международного суда и 3 статьи Женевской конвенции. Так держать!",
                 icon: ""
             }
         ];
@@ -409,7 +565,7 @@
                 const iconIndex = currentCardIndex - 1;
                 if (iconIndex < footerIcons.length) {
                     footerIcons[iconIndex].classList.add('active');
-                    const img = footerIcons[iconIndex].querySelector('img');
+                    const img = footerIcons[iconIndex].querySelector('jpg');
                     img.src = card.icon;
                     img.alt = card.title;
                 }
